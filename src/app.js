@@ -26,42 +26,53 @@ const initPlayers = (players) => {
     let detailedPlayers = [];
     // Create players using for loop
     // Type your code here
-    for (i=1 ; i<players.length; i++){
+    
+    players.forEach((player, index) =>{
         detailedPlayers.push({
-            name:players[i],
-            strength:getRandomStrength(),
-            image:"images/super-"+(i+1)+".png",
-            type:i%2==0 ? "hero":"villain",
+            name: player,
+            strength : 2+index,
+            image: 'images/super-'+(index + 1)+'.png',
+            type : index%2==0? 'hero' : 'villain',
+            id: index+1
         })
-    }
-
-
+    })
     return detailedPlayers;
 }
 
 // getting random strength
 const getRandomStrength = () => {
     // Return a random integer (0,100]
+    return Math.ceil(Math.random()*100)
     // Note: You can use Math.random() and Math.ceil()
 }
 
+
+const view = (playerObj) => {
+    let player = document.createElement('div');
+    player.setAttribute('class','player');
+    let image = document.createElement('img');
+    image.setAttribute('src', playerObj.image);
+    image.setAttribute('alt','');
+    let name = document.createElement('div');
+    name.className = 'name';
+    name.textContent = playerObj.name;
+    let strength = document.createElement('div');
+    strength.textContent = playerObj.strength;
+    strength.setAttribute('class','strength');
+    player.append(image, name, strength);
+    return player;
+  };
+
 const buildPlayers = (players, type) => {
-    let fragment = '';
+    let fragment = document.createElement('div')
+    players.filter((player)=>player.type==type).forEach((player)=>fragment.append(view(player)))
 
     // Loop through players and accumulate HTML template
     // depending of type of player(hero|villain)
     // Type your code here
-    for (i=1 ; i<100 ; i++){
-        if (players[i].type === type) {
-            fragment += `
-            <div class="player">
-                <img src="${players[i].image}" alt="">
-                 <div class="name">${players[i].name}</div>
-                <div class="strength">${players[i].strength}</div>
-            </div>`;
-    }
-    return fragment;
-}}
+    
+    return fragment.innerHTML
+}
 // Display players in HTML
 const viewPlayers = (players) => {
 
@@ -73,3 +84,20 @@ const viewPlayers = (players) => {
 window.onload = () => {
     viewPlayers(initPlayers(PLAYERS));
 }
+
+
+
+
+
+
+// <divclass="player">
+// <imagesrc="images/super-1.png"alt=""></image>
+// <divclass="name">Hero</div>
+// <divclass="strength">2</div></div>
+
+// ' to be '
+
+// <divclass="player">
+// <imgsrc="images/super-1.png"alt="">
+// <divclass="name">Hero</div>
+// <divclass="strength">2</div></div>
